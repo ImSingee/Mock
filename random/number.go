@@ -37,8 +37,5 @@ func Float32(min, max float32) float32 {
 var Float = Float64
 
 func init() {
-	//function.MustRegisterFunction(Int, "int", "integer")
-	function.MustRegisterFunction(func() (int, error) {
-		return 1, nil
-	}, "test")
+	function.MustRegisterFunction(Int, "int", "integer")
 }

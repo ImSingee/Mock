@@ -2,6 +2,7 @@ package function
 
 import (
 	"fmt"
+	"github.com/ImSingee/dt"
 	"reflect"
 )
 
@@ -13,10 +14,31 @@ type Function struct {
 	MayBeError bool // 返回值是 error
 }
 
+func (f *Function) Apply(args []interface{}) ([]reflect.Value, error) {
+	if len(args) != len(f.Args) {
+		return nil, fmt.Errorf("args number mismatch")
+	}
+
+	mappedArgs := make([]reflect.Value, 0, len(args))
+	for i, arg := range args {
+		dtValue, ok := dt.AsType(arg, f.Args[i].InType)
+		if !ok {
+			return nil, fmt.Errorf("arg %d's in-type mismatch", i+1)
+		}
+		value, ok := dt.ConvertToReflectType(dtValue, f.Args[i].OutType)
+		if !ok {
+			return nil, fmt.Errorf("arg %d's out-type mismatch", i+1)
+		}
+		mappedArgs = append(mappedArgs, value)
+	}
+
+	return mappedArgs, nil
+}
+
 type Argument struct {
 	Name string
 
-	InType  reflect.Kind // 用户字面书写的转换后参数类型，支持 string, bool, *GenericNumber
+	InType  dt.Type      // 用户字面书写的转换后参数类型，支持 string, bool, *GenericNumber
 	OutType reflect.Kind // 函数原型参数类型，支持 string, bool, int[X], uint[X]
 	// 暂不支持可变参数
 }
@@ -78,6 +100,7 @@ func registerFunction(name string, f interface{}) error {
 
 		args[i].Name = arg.Name()
 		args[i].OutType = arg.Kind()
+		args[i].InType = dt.MapReflectType(arg.Kind())
 		// TODO inType (在 dt 中完成）
 	}
 
