@@ -3,6 +3,7 @@ package mock
 import (
 	"fmt"
 	"github.com/ImSingee/dt"
+	"github.com/ImSingee/mock/function"
 	"go/ast"
 	"go/parser"
 	"regexp"
@@ -95,7 +96,7 @@ func Mock(source string) (s string, err error) {
 			panic(err)
 		}
 
-		result, err := CallFunction(funcName, args)
+		result, err := function.CallFunction(funcName, args)
 		if err != nil {
 			panic(err)
 		}

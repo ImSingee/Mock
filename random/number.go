@@ -1,5 +1,7 @@
 package random
 
+import "github.com/ImSingee/mock/function"
+
 // 返回一个随机的自然数（大于等于 0 的整数）
 // - min 最小值
 // - max 最大值
@@ -33,3 +35,10 @@ func Float32(min, max float32) float32 {
 }
 
 var Float = Float64
+
+func init() {
+	//function.MustRegisterFunction(Int, "int", "integer")
+	function.MustRegisterFunction(func() (int, error) {
+		return 1, nil
+	}, "test")
+}

@@ -5,3 +5,7 @@ func Bool() bool {
 }
 
 var Boolean = Bool
+
+func init() {
+	//function.MustRegisterFunction(Boolean, "bool", "boolean")
+}
