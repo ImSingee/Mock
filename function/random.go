@@ -69,4 +69,31 @@ func init() {
 			return random.Character(pool)
 		},
 	)
+
+	// @string()
+	// @string(length)
+	// @string(min, max)
+	// @string(pool)
+	// @string(pool, length)
+	// @string(pool, min, max)
+	MustRegisterFunction("string",
+		func() string {
+			return random.String("numletter", 1, 20)
+		},
+		func(length int) string {
+			return random.String("numletter", length, length)
+		},
+		func(min, max int) string {
+			return random.String("numletter", min, max)
+		},
+		func(pool string) string {
+			return random.String(pool, 1, 20)
+		},
+		func(pool string, length int) string {
+			return random.String(pool, length, length)
+		},
+		func(pool string, min, max int) string {
+			return random.String(pool, min, max)
+		},
+	)
 }

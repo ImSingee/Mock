@@ -17,7 +17,7 @@ func Natural(min, max int) int {
 func Integer(min, max int) int {
 	min, max = fixIntMinMax(min, max)
 
-	return r.Intn(max-min) + min
+	return r.Intn(max-min+1) + min
 }
 
 var Int = Integer
