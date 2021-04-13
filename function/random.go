@@ -54,4 +54,8 @@ func init() {
 		},
 	)
 
+	MustRegisterFunction("number", func(a int) int {
+		return a
+	})
+
 }

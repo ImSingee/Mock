@@ -9,12 +9,13 @@ import (
 	"testing"
 )
 
-func TestMockNone(t *testing.T) {
+func TestMock(t *testing.T) {
 	mocks := map[string]string{
-		"ABCD":    "ABCD",
-		"@some":   "@some",
-		"@@":      "@",
-		"@@abc()": "@abc()",
+		"ABCD":         "ABCD",
+		"@some":        "@some",
+		"@@":           "@",
+		"@@number()":   "@number()",
+		"@@@number(5)": "@5",
 	}
 
 	for a, b := range mocks {

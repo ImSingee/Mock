@@ -13,7 +13,7 @@ func Natural(min, max int) int {
 // - min 最小值
 // - max 最大值
 //
-// 映射情况 1: min < max -> swap(min, max)
+// 映射情况 1: min > max -> swap(min, max)
 func Integer(min, max int) int {
 	min, max = fixIntMinMax(min, max)
 
