@@ -103,6 +103,9 @@ func init() {
 	// @increment()
 	// @increment(step)
 	// @increment(step, delta)
+	// @increment(namespace)
+	// @increment(namespace, step)
+	// @increment(namespace, step, delta)
 	MustRegisterFunction("increment",
 		func() int64 {
 			return random.Increment()
@@ -112,6 +115,15 @@ func init() {
 		},
 		func(step, delta int64) int64 {
 			return random.IncrementWithStepAndDelta(step, delta)
+		},
+		func(namespace string) int64 {
+			return random.IncrementN(namespace)
+		},
+		func(namespace string, step int64) int64 {
+			return random.IncrementNWithStep(namespace, step)
+		},
+		func(namespace string, step, delta int64) int64 {
+			return random.IncrementNWithStepAndDelta(namespace, step, delta)
 		},
 	)
 }
