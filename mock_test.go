@@ -10,26 +10,23 @@ import (
 )
 
 func TestMockNone(t *testing.T) {
-	mock, err := Mock("ABCD")
-	tt.AssertIsNil(t, err)
-	fmt.Println(mock)
-	tt.AssertEqual(t, "ABCD", mock)
+	mocks := map[string]string{
+		"ABCD":    "ABCD",
+		"@some":   "@some",
+		"@@":      "@",
+		"@@abc()": "@abc()",
+	}
 
-	mock, err = Mock("@some")
-	tt.AssertIsNil(t, err)
-	fmt.Println(mock)
-	tt.AssertEqual(t, "@some", mock)
+	for a, b := range mocks {
+		t.Run("test for "+a, func(t *testing.T) {
+			mock, err := Mock(a)
+			tt.AssertIsNil(t, err)
+			fmt.Println(mock)
+			tt.AssertEqual(t, b, mock)
+		})
+	}
 
-	//fmt.Println(Mock("@number"))
-	//fmt.Println(Mock("@number()"))
-	//fmt.Println(Mock("@number(3)"))
-	//fmt.Println(Mock("@number(3,5)"))
-	//fmt.Println(Mock("@number(3, 5)"))
 	//fmt.Println(Mock(`@string("aeiou", 3, 5)`))
-	//fmt.Println(Mock(`@bool(true)`))
-	//fmt.Println(Mock(`@test(true, 'a')`))
-	//fmt.Println(Mock(`@test(nil)`))
-	//fmt.Println(Mock(`@something(1.2, 3.4, )`))
 }
 
 func TestMockBoolean(t *testing.T) {

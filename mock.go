@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-var re = regexp.MustCompile(`@(?P<call>(?P<function>[a-zA-Z0-9\-_]+)(?P<args>\(.*?\)))`)
+var re = regexp.MustCompile(`@(@|(?P<call>(?P<function>[a-zA-Z0-9\-_]+)(?P<args>\(.*?\))))`)
 
 func mapArgs(args []ast.Expr) ([]dt.Value, error) {
 	mapped := make([]dt.Value, len(args))
@@ -73,7 +73,13 @@ func Mock(source string) (s string, err error) {
 	}()
 
 	return re.ReplaceAllStringFunc(source, func(s string) string {
-		f := source[1:]
+		// 转义
+		if s == "@@" {
+			return "@"
+		}
+
+		// 函数调用
+		f := s[1:]
 
 		tree, err := parser.ParseExpr(f)
 
