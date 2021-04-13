@@ -54,8 +54,19 @@ func init() {
 		},
 	)
 
+	// @number(a) -> 永远返回 a
 	MustRegisterFunction("number", func(a int) int {
 		return a
 	})
 
+	// @character()       @char()
+	// @character(pool)   @char(pool)
+	MustRegisterFunction("char", "character",
+		func() byte {
+			return random.Character("numletter")
+		},
+		func(pool string) byte {
+			return random.Character(pool)
+		},
+	)
 }

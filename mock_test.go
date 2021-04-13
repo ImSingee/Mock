@@ -151,3 +151,36 @@ func TestMockFloat(t *testing.T) {
 		}
 	})
 }
+
+func TestMockChar(t *testing.T) {
+	checkIn := func(t *testing.T, c string, pool string) {
+		tt.AssertEqual(t, 1, len(c))
+		b := c[0]
+
+		for i := 0; i < len(pool); i++ {
+			if pool[i] == b {
+				return
+			}
+		}
+
+		t.FailNow()
+	}
+
+	t.Run("no param", func(t *testing.T) {
+		for i := 0; i < 100; i++ {
+			mock, err := Mock("@char()")
+			tt.AssertIsNil(t, err)
+			fmt.Println(mock)
+			checkIn(t, mock, random.MapCharacterPool("numletter"))
+		}
+	})
+
+	t.Run("one param (pool)", func(t *testing.T) {
+		for i := 0; i < 100; i++ {
+			mock, err := Mock(`@char("aeiou")`)
+			tt.AssertIsNil(t, err)
+			fmt.Println(mock)
+			checkIn(t, mock, "aeiou")
+		}
+	})
+}
