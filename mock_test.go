@@ -5,6 +5,7 @@ import (
 	"github.com/ImSingee/dt"
 	"github.com/ImSingee/mock/random"
 	"github.com/ImSingee/tt"
+	"strings"
 	"testing"
 )
 
@@ -92,4 +93,63 @@ func TestMockInteger(t *testing.T) {
 			})
 		})
 	}
+}
+
+func TestMockFloat(t *testing.T) {
+	t.Run("no param", func(t *testing.T) {
+		for i := 0; i < 100; i++ {
+			mock, err := Mock("@float()")
+			tt.AssertIsNil(t, err)
+			fmt.Println(mock)
+			num, ok := dt.NumberFromString(mock)
+			tt.AssertTrue(t, ok)
+			tt.AssertTrue(t, num.Float())
+		}
+	})
+
+	t.Run("one param (min)", func(t *testing.T) {
+		for i := 0; i < 100; i++ {
+			r := random.Float64(100, 1000)
+			mock, err := Mock(fmt.Sprintf("@float(%.3f)", r))
+			fmt.Println(mock)
+			tt.AssertIsNil(t, err)
+			num, ok := dt.NumberFromString(mock)
+			tt.AssertTrue(t, ok)
+			tt.AssertTrue(t, num.Float())
+			tt.AssertTrue(t, num.Float64() >= float64(int64(r)))
+		}
+	})
+
+	t.Run("two param (min, max)", func(t *testing.T) {
+		for i := 0; i < 100; i++ {
+			r := random.Float64(100, 1000)
+			q := random.Float64(10000, 100000)
+			mock, err := Mock(fmt.Sprintf("@float(%.3f, %.3f)", r, q))
+			fmt.Println(mock)
+			tt.AssertIsNil(t, err)
+			num, ok := dt.NumberFromString(mock)
+			tt.AssertTrue(t, ok)
+			tt.AssertTrue(t, num.Float())
+			tt.AssertTrue(t, num.Float64() >= float64(int64(r)))
+			tt.AssertTrue(t, num.Float64() <= float64(int64(q)+1))
+		}
+	})
+
+	t.Run("two param (min, max, d)", func(t *testing.T) {
+		for i := 0; i < 100; i++ {
+			r := random.Float64(100, 1000)
+			q := random.Float64(10000, 100000)
+			d := random.Integer(1, 5)
+			mock, err := Mock(fmt.Sprintf("@float(%.3f, %.3f, %d)", r, q, d))
+			fmt.Println(mock)
+			tt.AssertIsNil(t, err)
+			num, ok := dt.NumberFromString(mock)
+			tt.AssertTrue(t, ok)
+			tt.AssertTrue(t, num.Float())
+			tt.AssertTrue(t, num.Float64() >= float64(int64(r)))
+			tt.AssertTrue(t, num.Float64() <= float64(int64(q)+1))
+			tt.AssertTrue(t, strings.Contains(mock, "."))
+			tt.AssertEqual(t, d, len(mock)-strings.Index(mock, ".")-1)
+		}
+	})
 }

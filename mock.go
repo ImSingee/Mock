@@ -12,8 +12,8 @@ import (
 
 var re = regexp.MustCompile(`@(?P<call>(?P<function>[a-zA-Z0-9\-_]+)(?P<args>\(.*?\)))`)
 
-func mapArgs(args []ast.Expr) ([]interface{}, error) {
-	mapped := make([]interface{}, len(args))
+func mapArgs(args []ast.Expr) ([]dt.Value, error) {
+	mapped := make([]dt.Value, len(args))
 	var err error
 
 	for i := range args {

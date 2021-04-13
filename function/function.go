@@ -2,10 +2,11 @@ package function
 
 import (
 	"fmt"
+	"github.com/ImSingee/dt"
 	"reflect"
 )
 
-func CallFunction(funcName string, args []interface{}) (interface{}, error) {
+func CallFunction(funcName string, args []dt.Value) (interface{}, error) {
 	funcs := functions[funcName]
 	if len(funcs) == 0 {
 		return nil, fmt.Errorf("unknwon function %s", funcName)
@@ -15,7 +16,7 @@ func CallFunction(funcName string, args []interface{}) (interface{}, error) {
 	for _, f := range funcs {
 		inArgs, err := f.Apply(args)
 		if err != nil {
-			lastErr = fmt.Errorf("args not match")
+			lastErr = fmt.Errorf("args not match %w", err)
 			continue
 		}
 

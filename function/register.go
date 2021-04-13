@@ -14,7 +14,7 @@ type Function struct {
 	MayBeError bool // 返回值是 error
 }
 
-func (f *Function) Apply(args []interface{}) ([]reflect.Value, error) {
+func (f *Function) Apply(args []dt.Value) ([]reflect.Value, error) {
 	if len(args) != len(f.Args) {
 		return nil, fmt.Errorf("args number mismatch")
 	}
