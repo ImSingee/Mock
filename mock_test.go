@@ -7,6 +7,7 @@ import (
 	"github.com/ImSingee/tt"
 	"strings"
 	"testing"
+	"unicode/utf8"
 )
 
 func TestMock(t *testing.T) {
@@ -154,16 +155,8 @@ func TestMockFloat(t *testing.T) {
 
 func TestMockChar(t *testing.T) {
 	checkIn := func(t *testing.T, c string, pool string) {
-		tt.AssertEqual(t, 1, len(c))
-		b := c[0]
-
-		for i := 0; i < len(pool); i++ {
-			if pool[i] == b {
-				return
-			}
-		}
-
-		t.FailNow()
+		tt.AssertEqual(t, 1, utf8.RuneCountInString(c))
+		tt.AssertTrue(t, strings.ContainsAny(c, pool))
 	}
 
 	t.Run("no param", func(t *testing.T) {
@@ -181,6 +174,83 @@ func TestMockChar(t *testing.T) {
 			tt.AssertIsNil(t, err)
 			fmt.Println(mock)
 			checkIn(t, mock, "aeiou")
+		}
+	})
+}
+
+func TestMockString(t *testing.T) {
+	checkIn := func(t *testing.T, s string, pool string) {
+		for _, c := range s {
+			tt.AssertTrue(t, strings.ContainsAny(string(c), pool))
+		}
+	}
+
+	t.Run("@string()", func(t *testing.T) {
+		for i := 0; i < 100; i++ {
+			mock, err := Mock(`@string()`)
+			tt.AssertIsNil(t, err)
+			//fmt.Println(mock)
+			checkIn(t, mock, random.MapCharacterPool("numletter"))
+		}
+	})
+
+	t.Run("@string(length)", func(t *testing.T) {
+		for i := 0; i < 100; i++ {
+			length := random.Natural(10, 100)
+			mock, err := Mock(fmt.Sprintf(`@string(%d)`, length))
+			tt.AssertIsNil(t, err)
+			//fmt.Println(mock)
+			checkIn(t, mock, random.MapCharacterPool("numletter"))
+			tt.AssertEqual(t, length, len(mock))
+		}
+	})
+
+	t.Run("@string(min, max)", func(t *testing.T) {
+		for i := 0; i < 100; i++ {
+			min := random.Natural(10, 50)
+			max := random.Natural(50, 100)
+
+			mock, err := Mock(fmt.Sprintf(`@string(%d, %d)`, min, max))
+			tt.AssertIsNil(t, err)
+			//fmt.Println(mock)
+			checkIn(t, mock, random.MapCharacterPool("numletter"))
+			tt.AssertTrue(t, len(mock) >= min)
+			tt.AssertTrue(t, len(mock) <= max)
+		}
+	})
+
+	t.Run("@string(pool)", func(t *testing.T) {
+		for i := 0; i < 100; i++ {
+			mock, err := Mock(fmt.Sprintf(`@string("aeiou")`))
+			tt.AssertIsNil(t, err)
+			//fmt.Println(mock)
+			checkIn(t, mock, "aeiou")
+		}
+	})
+
+	t.Run("@string(pool, length)", func(t *testing.T) {
+		for i := 0; i < 100; i++ {
+			length := random.Natural(10, 100)
+
+			mock, err := Mock(fmt.Sprintf(`@string("aeiou", %d)`, length))
+			tt.AssertIsNil(t, err)
+			//fmt.Println(mock)
+			checkIn(t, mock, "aeiou")
+			tt.AssertEqual(t, length, len(mock))
+		}
+	})
+
+	t.Run("@string(pool, min, max)", func(t *testing.T) {
+		for i := 0; i < 100; i++ {
+			min := random.Natural(10, 50)
+			max := random.Natural(50, 100)
+
+			mock, err := Mock(fmt.Sprintf(`@string("aeiou", %d, %d)`, min, max))
+			tt.AssertIsNil(t, err)
+			//fmt.Println(mock)
+			checkIn(t, mock, "aeiou")
+			tt.AssertTrue(t, len(mock) >= min)
+			tt.AssertTrue(t, len(mock) <= max)
 		}
 	})
 }
