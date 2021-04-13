@@ -254,3 +254,19 @@ func TestMockString(t *testing.T) {
 		}
 	})
 }
+
+func TestMockSentence(t *testing.T) {
+	t.Run("@sentence()", func(t *testing.T) {
+		for i := 0; i < 100; i++ {
+			mock, err := Mock(`@sentence()`)
+			tt.AssertIsNil(t, err)
+			fmt.Println(mock)
+			tt.AssertEqual(t, strings.TrimSpace(mock), mock)
+			tt.AssertTrue(t,
+				strings.HasSuffix(mock, ".") ||
+					strings.HasSuffix(mock, "?") ||
+					strings.HasSuffix(mock, "!"),
+			)
+		}
+	})
+}

@@ -96,4 +96,7 @@ func init() {
 			return random.String(pool, min, max)
 		},
 	)
+
+	// @sentence
+	MustRegisterFunction("sentence", random.Sentence)
 }
