@@ -99,4 +99,19 @@ func init() {
 
 	// @sentence
 	MustRegisterFunction("sentence", random.Sentence)
+
+	// @increment()
+	// @increment(step)
+	// @increment(step, delta)
+	MustRegisterFunction("increment",
+		func() int64 {
+			return random.Increment()
+		},
+		func(step int64) int64 {
+			return random.IncrementWithStep(step)
+		},
+		func(step, delta int64) int64 {
+			return random.IncrementWithStepAndDelta(step, delta)
+		},
+	)
 }
