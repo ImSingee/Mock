@@ -46,5 +46,5 @@ func CallFunction(funcName string, args []dt.Value) (interface{}, error) {
 	//}
 	//b.WriteString("}")
 
-	return nil, lastErr
+	return nil, fmt.Errorf("no valid function signature, lastErr = %w", lastErr)
 }
