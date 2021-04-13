@@ -260,13 +260,45 @@ func TestMockSentence(t *testing.T) {
 		for i := 0; i < 100; i++ {
 			mock, err := Mock(`@sentence()`)
 			tt.AssertIsNil(t, err)
-			fmt.Println(mock)
+			//fmt.Println(mock)
 			tt.AssertEqual(t, strings.TrimSpace(mock), mock)
 			tt.AssertTrue(t,
 				strings.HasSuffix(mock, ".") ||
 					strings.HasSuffix(mock, "?") ||
 					strings.HasSuffix(mock, "!"),
 			)
+		}
+	})
+}
+
+func TestMockIncrement(t *testing.T) {
+	random.IncrementReset()
+	t.Run("@increment()", func(t *testing.T) {
+		for i := 0; i < 100; i++ {
+			mock, err := Mock(`@increment()`)
+			tt.AssertIsNil(t, err)
+			//fmt.Println(mock)
+			tt.AssertEqual(t, dt.ToString(i+1), mock)
+		}
+	})
+
+	random.IncrementReset()
+	t.Run("@increment(step)", func(t *testing.T) {
+		for i := 0; i < 100; i++ {
+			mock, err := Mock(`@increment(3)`)
+			tt.AssertIsNil(t, err)
+			//fmt.Println(mock)
+			tt.AssertEqual(t, dt.ToString(3*(i+1)), mock)
+		}
+	})
+
+	random.IncrementReset()
+	t.Run("@increment(step, delta)", func(t *testing.T) {
+		for i := 0; i < 100; i++ {
+			mock, err := Mock(`@increment(3, 1024)`)
+			tt.AssertIsNil(t, err)
+			//fmt.Println(mock)
+			tt.AssertEqual(t, dt.ToString(3*(i+1)+1024), mock)
 		}
 	})
 }
