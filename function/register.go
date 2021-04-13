@@ -20,11 +20,11 @@ func (f *Function) Apply(args []interface{}) ([]reflect.Value, error) {
 	}
 
 	mappedArgs := make([]reflect.Value, 0, len(args))
-	for i, arg := range args {
-		dtValue, ok := dt.AsType(arg, f.Args[i].InType)
-		if !ok {
-			return nil, fmt.Errorf("arg %d's in-type mismatch", i+1)
-		}
+	for i, dtValue := range args {
+		//dtValue, ok := dt.AsType(arg, f.Args[i].InType)
+		//if !ok {
+		//	return nil, fmt.Errorf("arg %d's in-type mismatch", i+1)
+		//}
 		value, ok := dt.ConvertToReflectType(dtValue, f.Args[i].OutType)
 		if !ok {
 			return nil, fmt.Errorf("arg %d's out-type mismatch", i+1)
@@ -43,8 +43,8 @@ type Argument struct {
 	// 暂不支持可变参数
 }
 
-func MustRegisterFunction(f interface{}, names ...string) {
-	err := RegisterFunction(f, names...)
+func MustRegisterFunction(params ...interface{}) {
+	err := RegisterFunction(params...)
 	if err != nil {
 		panic(err)
 	}
@@ -53,11 +53,28 @@ func MustRegisterFunction(f interface{}, names ...string) {
 var ErrIsNotFunction = fmt.Errorf("is not function")
 var errorInterface = reflect.TypeOf((*error)(nil)).Elem()
 
-func RegisterFunction(f interface{}, names ...string) error {
+// 注册函数
+// 接收的参数类型：
+// - string 类型：函数名
+// - function 类型：函数
+func RegisterFunction(params ...interface{}) error {
+	names := make([]string, 0, len(params))
+	fs := make([]interface{}, 0, len(params))
+
+	for _, param := range params {
+		if s, ok := param.(string); ok {
+			names = append(names, s)
+		} else {
+			fs = append(fs, param)
+		}
+	}
+
 	for _, name := range names {
-		err := registerFunction(name, f)
-		if err != nil {
-			return err
+		for _, f := range fs {
+			err := registerFunction(name, f)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
@@ -103,6 +120,7 @@ func registerFunction(name string, f interface{}) error {
 		args[i].InType = dt.MapReflectType(arg.Kind())
 		// TODO inType (在 dt 中完成）
 	}
+	function.Args = args
 
 	// TODO 重载冲突检查
 	functions[name] = append(functions[name], function)

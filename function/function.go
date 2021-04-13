@@ -19,7 +19,7 @@ func CallFunction(funcName string, args []interface{}) (interface{}, error) {
 			continue
 		}
 
-		ff := reflect.ValueOf(f)
+		ff := reflect.ValueOf(f.F)
 		result := ff.Call(inArgs)
 
 		if f.MayBeError {

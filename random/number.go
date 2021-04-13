@@ -1,6 +1,9 @@
 package random
 
-import "github.com/ImSingee/mock/function"
+import (
+	"github.com/ImSingee/mock/function"
+	"math"
+)
 
 // 返回一个随机的自然数（大于等于 0 的整数）
 // - min 最小值
@@ -37,5 +40,13 @@ func Float32(min, max float32) float32 {
 var Float = Float64
 
 func init() {
-	function.MustRegisterFunction(Int, "int", "integer")
+	function.MustRegisterFunction("int", "integer",
+		func() int { // @integer() @int()
+			return Integer(math.MinInt32, math.MaxInt32)
+		},
+		func(min int) int { // @integer(10000)  @int(10000)
+			return Integer(min, math.MaxInt32)
+		},
+		Int, // @integer(60, 100) @int(60, 100)
+	)
 }
