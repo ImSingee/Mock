@@ -164,7 +164,7 @@ func TestMockChar(t *testing.T) {
 			mock, err := Mock("@char()")
 			tt.AssertIsNil(t, err)
 			fmt.Println(mock)
-			checkIn(t, mock, random.MapCharacterPool("numletter"))
+			checkIn(t, mock, string(random.MapCharacterPool("numletter")))
 		}
 	})
 
@@ -190,7 +190,7 @@ func TestMockString(t *testing.T) {
 			mock, err := Mock(`@string()`)
 			tt.AssertIsNil(t, err)
 			//fmt.Println(mock)
-			checkIn(t, mock, random.MapCharacterPool("numletter"))
+			checkIn(t, mock, string(random.MapCharacterPool("numletter")))
 		}
 	})
 
@@ -200,7 +200,7 @@ func TestMockString(t *testing.T) {
 			mock, err := Mock(fmt.Sprintf(`@string(%d)`, length))
 			tt.AssertIsNil(t, err)
 			//fmt.Println(mock)
-			checkIn(t, mock, random.MapCharacterPool("numletter"))
+			checkIn(t, mock, string(random.MapCharacterPool("numletter")))
 			tt.AssertEqual(t, length, len(mock))
 		}
 	})
@@ -213,7 +213,7 @@ func TestMockString(t *testing.T) {
 			mock, err := Mock(fmt.Sprintf(`@string(%d, %d)`, min, max))
 			tt.AssertIsNil(t, err)
 			//fmt.Println(mock)
-			checkIn(t, mock, random.MapCharacterPool("numletter"))
+			checkIn(t, mock, string(random.MapCharacterPool("numletter")))
 			tt.AssertTrue(t, len(mock) >= min)
 			tt.AssertTrue(t, len(mock) <= max)
 		}

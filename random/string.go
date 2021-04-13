@@ -11,10 +11,10 @@ func String(pool string, min, max int) string {
 
 	l := Natural(min, max)
 
-	pool = MapCharacterPool(pool)
+	mappedPool := MapCharacterPool(pool)
 
 	for i := 0; i < l; i++ {
-		b.WriteByte(CharacterR(pool))
+		b.WriteRune(CharacterR(mappedPool))
 	}
 
 	return b.String()

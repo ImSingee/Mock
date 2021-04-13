@@ -62,10 +62,10 @@ func init() {
 	// @character()       @char()
 	// @character(pool)   @char(pool)
 	MustRegisterFunction("char", "character",
-		func() byte {
+		func() rune {
 			return random.Character("numletter")
 		},
-		func(pool string) byte {
+		func(pool string) rune {
 			return random.Character(pool)
 		},
 	)
