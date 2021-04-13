@@ -118,11 +118,9 @@ func registerFunction(name string, f interface{}) error {
 		args[i].Name = arg.Name()
 		args[i].OutType = arg.Kind()
 		args[i].InType = dt.MapReflectType(arg.Kind())
-		// TODO inType (在 dt 中完成）
 	}
 	function.Args = args
 
-	// TODO 重载冲突检查
 	functions[name] = append(functions[name], function)
 
 	return nil
