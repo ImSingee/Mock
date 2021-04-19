@@ -40,7 +40,6 @@ func TestApplyStruct(t *testing.T) {
 }
 
 func TestApplyNestedStruct(t *testing.T) {
-
 	var p = "88"
 	var q = "@number(88)"
 
@@ -74,4 +73,27 @@ func TestApplyNestedStruct(t *testing.T) {
 	tt.AssertEqual(t, k.Y.A, "66")
 	tt.AssertEqual(t, k.Y.B, "33")
 	tt.AssertEqual(t, k.Y.X.A, "66")
+}
+
+func TestApplyAliasString(t *testing.T) {
+	type A = string
+	var s A
+	s = "@number(10)"
+
+	tt.AssertIsNil(t, Apply(&s))
+	tt.AssertEqual(t, s, "10")
+}
+
+func TestApplyAliasStruct(t *testing.T) {
+	type A = string
+	type T struct {
+		A A
+	}
+
+	v := T{
+		A: "@number(10)",
+	}
+
+	tt.AssertIsNil(t, Apply(&v))
+	tt.AssertEqual(t, v.A, "10")
 }
