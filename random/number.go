@@ -1,6 +1,6 @@
 package random
 
-// 返回一个随机的自然数（大于等于 0 的整数）
+// 返回一个在 [min, max] 之间的随机自然数（大于等于 0 的整数）
 // - min 最小值
 // - max 最大值
 func Natural(min, max int) int {
